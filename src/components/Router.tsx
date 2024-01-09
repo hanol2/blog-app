@@ -26,8 +26,6 @@ export default function Router({isAuthenticated} : RouterProps) {
       <Route path="/posts/new" element={<PostNew/>}/>
       <Route path="/posts/edit/:id" element={<PostEditPage/>}/>
       <Route path="/profile" element={<ProfilePage/>}/>
-      <Route path="/login" element={<LoginPage/>}/>
-      <Route path="/signup" element={<SignUpPage/>}/>
       {/* default path설정 :  위에서 정의하지않은 루트 접속할 경우 default path설정한 곳으로 이동하도록 */}
       <Route path="*" element={<Navigate replace to="/"/>}/>
       </>
