@@ -28,6 +28,7 @@ export default function PostList ( {hasNavigation = true } : PostsListProps ) {
 
     const getPosts = async ()=>{
         const datas = await getDocs(collection(db, "posts"));
+        //  setPosts([]); 로 삭제를 누를 때마다 게시글이 더 늘어나는 오류 해결
         setPosts([]);
         datas?.forEach((doc)=>{
             const dataObj = {...doc.data(), id: doc.id}
@@ -40,7 +41,7 @@ export default function PostList ( {hasNavigation = true } : PostsListProps ) {
         if (confirm && id) {
             await deleteDoc(doc(db, "posts", id))
             toast.success("게시글을 삭제했습니다.")
-            // 변경된 posts 리스트를 다시 가져옴 
+            //  getPosts() 변경된 posts 리스트를 다시 가져오지 않는 오류 해결
             getPosts();
         }
     }
