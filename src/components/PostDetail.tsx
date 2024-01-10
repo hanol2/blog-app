@@ -6,6 +6,7 @@ import { db } from "firebaseApp";
 import Loader from "./Loader";
 import { toast } from "react-toastify";
 import AuthContext from "context/AuthContext";
+import Comments from "./Comments";
 
 export default function PostDetail() {
   const [post, setPost] = useState<PostProps | null>(null);
@@ -70,6 +71,7 @@ export default function PostDetail() {
                 {post?.content}
               </div>
             </div>
+            <Comments/>
           </>
         ) : (
           <Loader />
