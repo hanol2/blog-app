@@ -50,6 +50,9 @@ export default function PostDetail() {
                                 <div className='post__date'>{post?.createdAt}</div>
                         </div>
                         <div className='post__utils-box'>
+                            {post?.category && 
+                            (<div>{post?.category}</div>)
+                            }
                             <div className='post__delete' onClick={handleDelete}>삭제</div>
                             <div className='post__edit'><Link to={`/posts/edit/${post?.id}`}>수정</Link></div>
                             </div>
