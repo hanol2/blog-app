@@ -1,9 +1,44 @@
+import AuthContext from 'context/AuthContext';
+import {collection, getDocs} from 'firebase/firestore'
+import {db} from 'firebaseApp'
+import {useContext, useEffect, useState} from 'react'
 import {Link} from "react-router-dom"
 interface PostsListProps {
     hasNavigation? : boolean;
 }
 
+type TabType = 'all' | 'any';
+
+export interface PostProps {
+    id?: string;
+    title: string;
+    email : string;
+    summary : string;
+    content : string;
+    createdAt: string;
+    updatedAt? : string;
+    uid : string;
+}
+
 export default function PostList ( {hasNavigation = true } : PostsListProps ) {
+    const [activeTab, setActiveTab] = useState<TabType>("all");
+    const [ posts, setPosts] = useState<PostProps[]>([])
+    const { user } = useContext(AuthContext)
+
+    const getPosts = async ()=>{
+        const datas = await getDocs(collection(db, "posts"));
+
+        datas?.forEach((doc)=>{
+            const dataObj = {...doc.data(), id: doc.id}
+            setPosts((prev: any) => [...prev, dataObj as PostProps])
+        })
+    }
+
+    useEffect(()=>{
+        getPosts()
+    },[])
+
+
     return(
         <>
        {hasNavigation && 
@@ -13,27 +48,30 @@ export default function PostList ( {hasNavigation = true } : PostsListProps ) {
             </div>)
         }
          <div className="post__list">
-                {[...Array(10)].map((e,index)=>(
-                    <div key={index} className='post__box'>
-                        <Link to={`/poste/${index}`}>
+                { posts?.length > 0 ? 
+                posts?.map((post, index)=>(
+                    <div key={post?.id} className='post__box'>
+                        <Link to={`/posts/${post?.id}`}>
                             <div className='post__profile-box'>
                                 <div className='post__profile'/>
-                                <div className='post__author-name'>패스트캠퍼스</div>
-                                <div className='post__date'>2024.01.05</div>
+                                <div className='post__author-name'>{post?.email}</div>
+                                <div className='post__date'>{post?.createdAt}</div>
                             </div>
                             <div className='post__title'>
-                        게시글 {index}
+                                {post?.title}
                             </div>
                             <div className='post__text'>
-AKMU is a South Korean brother and sister duo, consisting of Lee Chan-hyuk and Lee Su-hyun. He belongs to YG Entertainment. Previously, they were active as Akdong Musician, but since September 2019, they changed the group name to AKMU. Akdong Musician participated in SBS's audition program "K-Pop Star 2" and won.
+                                {post?.summary}
                             </div>
-                        <div className='post__utils-box'>
+                            </Link>
+                            { post?.email === user?.email && (
+                            <div className='post__utils-box'>
                             <div className='post__delete'>삭제</div>
-                            <div className='post__edit'>수정</div>
+                            <Link to={`/posts/edit/${post?.id}`} className="post__edit">수정</Link>
                         </div>
-                        </Link>
+                            )}
                     </div>
-                ))}
+                )) : <div className='post__no-post'>게시글이 없습니다.</div>}
             </div>
             </>
     )
