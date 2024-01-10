@@ -18,7 +18,6 @@ const firebaseConfig = {
 };
 
 
-
 try {
   app = getApp("app")
 } catch (e){
