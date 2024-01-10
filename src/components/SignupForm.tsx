@@ -16,11 +16,11 @@ export default function SignupForm(){
   const onSubmit = async (e:React.FormEvent<HTMLFormElement>) =>{
     e.preventDefault()
     try {
-      // const auth = getAuth(app);
-      // await createUserWithEmailAndPassword(auth, email, password)
+      const auth = getAuth(app);
+      await createUserWithEmailAndPassword(auth, email, password)
 
       toast.success("회원가입에 성공했습니다.")
-      navigate("/login")
+      navigate("/")
     } catch (error : any) {
       console.log(error)
       toast.error(error?.code)
