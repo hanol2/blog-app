@@ -20,8 +20,8 @@ interface PostListProps {
 
 export interface CommentsInterface {
   content: string;
-  uid: string;
-  email: string;
+  uid:string;
+  email : string;
   createdAt: string;
 }
 
